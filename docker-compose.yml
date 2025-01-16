@@ -10,8 +10,6 @@ services:
       - redis
     env_file:
       - ./.env
-    environment:
-      REDIS_URL: rediss://red-cu4gdsd6l47c73b38r30:E8G4LP8K90wMhBwPBydlJGTVZ0x5AC1M@oregon-redis.render.com:6379
   db:
     image: postgres
     environment:
