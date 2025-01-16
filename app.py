@@ -21,9 +21,16 @@ def create_app(db_url=None):
     app = Flask(__name__)
     load_dotenv()
 
-    connect = redis.from_url(
-        os.getenv("REDIS_URL")
-    )
+    connect = None
+
+    try:
+        # Testando a conexão com o Redis
+        redis_url = os.getenv("REDIS_URL")
+        connect = redis.from_url(redis_url)
+        print(f"Conexão com {redis_url} bem-sucedida!")
+    except Exception as e:
+        print(f"Erro ao conectar ao Redis: {e}")
+
     app.queue = Queue("emails", connection=connect)
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Stores REST API"
