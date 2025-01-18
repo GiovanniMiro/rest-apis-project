@@ -16,6 +16,15 @@ Projeto de API REST, desenvolvido com Python e Flask, que armazena dados de usu�
 
 Em construção...
 
+Para iniciar o servidor localmente:
+
+``` 
+flask run 
+```
+Para iniciar o servidor remotamente:
+```
+docker-compose up --build -d
+```
 ## Canais de acesso
 
 Disponível localmente em: http://127.0.0.1:5000
