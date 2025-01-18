@@ -10,7 +10,6 @@ from blocklist import BLOCKLIST
 
 from models import UserModel
 from schemas import UserSchema, UserRegisterSchema
-from tasks import send_user_registration_email
 
 blp = Blueprint("Users", "users", description="Operations on users")
 
@@ -33,8 +32,6 @@ class UserRegister(MethodView):
         )
         db.session.add(user)
         db.session.commit()
-
-        current_app.queue.enqueue(send_user_registration_email, user.email, user.username)
 
         return {"message": "user created successfully."}, 200
 
