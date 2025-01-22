@@ -1,6 +1,6 @@
 # Projeto de Armazenamento de Dados de Lojas
 
-Projeto de API REST, desenvolvido com Python e Flask, que armazena dados de usuários e lojas, incluindo seus itens e respectivas etiquetas. O projeto também oferece recursos de registro, login, controle de acesso e CRUD dos elementos.
+Projeto de API REST, desenvolvido com Python e Flask, que armazena dados de usuários e lojas, incluindo seus itens e respectivas etiquetas. O projeto também oferece recursos de registro, login, controle de acesso e gerenciamento dos elementos.
 
 ## Tecnologias
 
@@ -26,13 +26,33 @@ Projeto de API REST, desenvolvido com Python e Flask, que armazena dados de usu�
 
 ## Inicialização
 
-Para iniciar o servidor remotamente:
+1. Clone o repositório:
+```
+git clone https://github.com/GiovanniMiro/rest-apis-project.git
+```
+
+2. Acesse a pasta do projeto:
+
+```
+cd rest-apis-project
+```
+
+3. Crie e ative o ambiente virtual:
+
+```commandline
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+4. Crie um banco de dados PostgreSQL e salve seu URL.
+5. Crie um Web Service no [Render](https://render.com/).
+6. No Web Service, vá para Environment.
+7. No campo de Environment Variables, crie a Key ```DATABASE_URL``` e preencha o seu Value com a URL do seu banco de dados.
+8. Construa as imagens e inicie os contêineres:
 ```
 docker-compose up --build -d
 ```
-
-Para iniciar o servidor localmente:
-
+9. Para iniciar o servidor localmente:
 ``` 
 flask run 
 ```
@@ -41,4 +61,4 @@ flask run
 
 Disponível localmente em: http://127.0.0.1:5000
 
-Disponível remotamente em: URL do Serviço Web do Render
+Disponível remotamente em: URL do Web Service do Render
