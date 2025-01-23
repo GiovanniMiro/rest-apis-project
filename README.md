@@ -59,7 +59,7 @@ flask run
 
 ## Canais de acesso
 
-Disponível localmente em: http://127.0.0.1:5000
+Disponível localmente em: http://localhost:5000
 
 Disponível remotamente em: URL do Web Service do Render.
 
@@ -67,14 +67,15 @@ Disponível remotamente em: URL do Web Service do Render.
 
 ### Registrar usuário
 
-- **Endpoint**: `/`
+- **Endpoint**: `/register`
 - **Descrição**: Cria um novo usuário e retorna um token de acesso.
 - **Método**: `POST`
 - **Exemplo de requisição**: 
 ```commandline
 { 
-
-
+    "username": "nome do usuário",
+    "email": "usuario@email.com",
+    "password": "senha"
 }
 ```
 
