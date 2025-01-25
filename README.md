@@ -1,4 +1,4 @@
-# API REST para Gerenciamento de Lojas, Usuários e Itens
+# API REST para Gerenciamento de Lojas, Usuários e Itens com Flask e Docker
 
 Este projeto é uma API RESTful desenvolvida com Python e Flask, destinada ao gerenciamento de dados de lojas, usuários e itens. Ele oferece funcionalidades como registro de usuários, autenticação segura com JWT, controle de acesso e operações CRUD completas para lojas e itens.
 ## Tecnologias
@@ -7,16 +7,16 @@ Este projeto é uma API RESTful desenvolvida com Python e Flask, destinada ao ge
 - **[Flask](https://flask.palletsprojects.com/)**: Microframework web em Python.
 - **[Docker](https://www.docker.com/)**: Containerização da aplicação.
 - **[JWT](https://jwt.io/)**: Padrão para compartilhamento de informações em segurança.
-- **[PostgreSQL](https://www.docker.com/)**: Gerenciamento de banco de dados relacional.
+- **[PostgreSQL](https://www.postgresql.org/docs/)**: Gerenciamento de banco de dados relacional.
 - **[Render Web Service](https://render.com/docs/web-services)**: Hospedagem da aplicação web.
 
 ## Bibliotecas
 
-- **[Flask-Smorest](https://render.com/docs/web-services)**: Extensão do Flask para criação de APIs REST.
+- **[Flask-Smorest](https://flask-smorest.readthedocs.io/en/latest/)**: Extensão do Flask para criação de APIs REST.
 - **[Python-dotenv](https://saurabh-kumar.com/python-dotenv/)**: Gerenciamento de variáveis de ambiente.
 - **[SQLAlchemy](https://www.sqlalchemy.org/)**: Acesso e gerenciamento de banco de dados SQL.
 - **[Flask-SQLAlchemy](https://flask-sqlalchemy.readthedocs.io/en/stable/)**: Integração do SQLAlchemy com o Flask.
-- **[Flask-JWT-Extended](https://flask-sqlalchemy.readthedocs.io/en/stable/)**: Extensão para autenticação com JSON Web Tokens (JWT).
+- **[Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/)**: Extensão para autenticação com JSON Web Tokens (JWT).
 - **[Passlib](https://passlib.readthedocs.io/en/stable/)**: Hashing de senhas e autenticação segura.
 - **[Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)**: Gerenciamento de migrações de banco de dados.
 - **[Gunicorn](https://docs.gunicorn.org/en/stable/)**: Servidor WSGI para aplicações em Python.
@@ -43,15 +43,23 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-4. Crie um banco de dados PostgreSQL e salve seu URL.
-5. Crie um Web Service no [Render](https://render.com/).
-6. No Web Service, vá para Environment.
-7. No campo de Environment Variables, crie a Key ```DATABASE_URL``` e preencha o seu Value com a URL do seu banco de dados.
-8. Construa as imagens e inicie os contêineres:
+4. Crie e configure o banco de dados PostgreSQL:
+- Se estiver utilizando um banco de dados local, crie um banco de dados PostgreSQL.
+- Caso esteja utilizando um serviço de banco de dados, como o [Render](https://render.com/), crie o banco de dados e obtenha a URL de conexão.
+- Adicione a URL do banco de dados no arquivo `.env`.
+5. Crie um Web Service no [Render](https://render.com/):
+- Para hospedar a API, crie um Web Service no [Render](https://render.com/).
+- Adicione a variável de ambiente `DATABASE_URL` com o valor da URL do banco de dados.
+
+6. Construa as imagens e inicie os contêineres:
+
+O comando abaixo vai construir as imagens do Docker e iniciar os contêineres em segundo plano.
 ```
 docker-compose up --build -d
 ```
-9. Para iniciar o servidor localmente:
+Isso criará o ambiente isolado com todas as dependências e o banco de dados configurado automaticamente.
+
+7. Para iniciar o servidor localmente:
 ``` 
 flask run 
 ```
@@ -63,6 +71,8 @@ Disponível localmente em: http://localhost:5000.
 Disponível remotamente em: URL_DO_SEU_WEB_SERVICE.
 
 ## Interagindo com a API
+
+Alguns endpoints necessitam de autorização para sua requisição, sendo necessário a utilização do token de acesso emitido ao usuário efetuar login.
 
 ### Requisições para controle de usuário
 #### 1. Registrar usuário
@@ -78,11 +88,18 @@ Disponível remotamente em: URL_DO_SEU_WEB_SERVICE.
     "password": "senha"
 } 
 ``` 
+- **Exemplo de resposta**:
+```json
+{
+	"access_token": "eyJhbGciOiJIUz...",
+	"refresh_token": "eyJhbGciOiJIUz..."
+}
+```
 
 #### 2. Login
 
 - **Endpoint**: `/login`
-- **Descrição**: Realiza a autenticação do usuário, retornando um token de acesso (JWT) para autenticação em outras requisições.
+- **Descrição**: Realiza a autenticação do usuário, retornando dois tokens JWT, um de acesso e outro de atualização, que são necessários para autenticação em outras requisições.
 - **Método**: `POST`
 - **Exemplo de requisição**: 
 ```json
@@ -95,18 +112,14 @@ Disponível remotamente em: URL_DO_SEU_WEB_SERVICE.
 #### 3. Logout
 
 - **Endpoint**: `/logout`
+- **Authorization**: `Bearer {{access_token}}`
 - **Descrição**: Finaliza a sessão atual.
 - **Método**: `POST`
-- **Exemplo de requisição**: 
-```json
-{ 
-    "username": "nome do usuário",
-    "password": "senha"
-} 
-``` 
+
 #### 4. Refresh
 
 - **Endpoint**: `/refresh`
+- **Authorization**: `Bearer {{refresh_token}}`
 - **Descrição**: Gera novo token de acesso sem a necessidade de novo login.
 - **Método**: `POST`
 
